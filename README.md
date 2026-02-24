@@ -24,4 +24,9 @@ Aplikasi memungkinkan pengguna untuk:
 
 Data keranjang disimpan sementara menggunakan **LocalStorage**, sehingga dapat diteruskan ke halaman checkout.
 
-## 📂 Struktur Project
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fee210c0-befa-4465-bac7-e601fe43b3c3" />
+
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/42bc1202-20bc-4603-b4ca-10fda95407d9" />
+
