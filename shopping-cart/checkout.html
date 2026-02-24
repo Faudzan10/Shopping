@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+
+<h1>Checkout Page</h1>
+
+<h2>Order Summary</h2>
+<div id="summary"></div>
+<h3 id="total"></h3>
+
+<h2>Customer Information</h2>
+<input type="text" placeholder="Nama"><br><br>
+<input type="text" placeholder="Alamat"><br><br>
+<button onclick="submitOrder()">Submit Order</button>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let summaryDiv = document.getElementById("summary");
+let total = 0;
+
+cart.forEach(item => {
+    total += item.price * item.quantity;
+
+    summaryDiv.innerHTML += `
+        <p>${item.name} x ${item.quantity}
+        = Rp ${(item.price * item.quantity).toLocaleString()}</p>
+    `;
+});
+
+document.getElementById("total").innerText =
+    "Total: Rp " + total.toLocaleString();
+
+function submitOrder() {
+    alert("Order berhasil!");
+    localStorage.removeItem("cart");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

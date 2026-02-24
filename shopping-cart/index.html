@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin: 3px;
+            cursor: pointer;
+        }
+
+        .cart {
+            margin-top: 20px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Shopping Cart App</h1>
+
+    <!-- SEARCH -->
+    <input type="text" id="search" placeholder="Search product..." onkeyup="searchProduct()">
+
+    <!-- CATEGORY -->
+    <select onchange="filterCategory(this.value)">
+        <option value="all">All</option>
+        <option value="shoes">Shoes</option>
+        <option value="clothes">Clothes</option>
+    </select>
+
+    <h2>Product List</h2>
+
+    <!-- PRODUCTS -->
+    <div class="product" data-category="shoes">
+        <h3>Sepatu Sport</h3>
+        <p>Rp 250000</p>
+        <button onclick="addToCart(1,'Sepatu Sport',250000)">Add to Cart</button>
+    </div>
+
+    <div class="product" data-category="clothes">
+        <h3>Jaket Hoodie</h3>
+        <p>Rp 300000</p>
+        <button onclick="addToCart(2,'Jaket Hoodie',300000)">Add to Cart</button>
+    </div>
+
+    <div class="product" data-category="shoes">
+        <h3>Sandal Casual</h3>
+        <p>Rp 150000</p>
+        <button onclick="addToCart(3,'Sandal Casual',150000)">Add to Cart</button>
+    </div>
+
+    <!-- CART -->
+    <div class="cart">
+        <h2>Cart</h2>
+        <div id="cart"></div>
+        <h3 id="total">Total: Rp 0</h3>
+        <button onclick="goToCheckout()">Checkout</button>
+    </div>
+
+<script>
+let cart = [];
+
+/* ADD TO CART */
+function addToCart(id, name, price) {
+    const item = cart.find(p => p.id === id);
+
+    if (item) {
+        item.quantity++;
+    } else {
+        cart.push({ id, name, price, quantity: 1 });
+    }
+
+    displayCart();
+}
+
+/* DISPLAY CART */
+function displayCart() {
+    const cartDiv = document.getElementById("cart");
+    cartDiv.innerHTML = "";
+    let total = 0;
+
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+
+        cartDiv.innerHTML += `
+            <div>
+                ${item.name} - Rp ${item.price.toLocaleString()}
+                x ${item.quantity}
+                <button onclick="updateQty(${item.id},1)">+</button>
+                <button onclick="updateQty(${item.id},-1)">-</button>
+                <button onclick="removeItem(${item.id})">Remove</button>
+            </div>
+        `;
+    });
+
+    document.getElementById("total").innerText =
+        "Total: Rp " + total.toLocaleString();
+}
+
+/* UPDATE QUANTITY */
+function updateQty(id, change) {
+    const item = cart.find(p => p.id === id);
+
+    if (item) {
+        item.quantity += change;
+
+        if (item.quantity <= 0) {
+            removeItem(id);
+        }
+    }
+
+    displayCart();
+}
+
+/* REMOVE ITEM */
+function removeItem(id) {
+    cart = cart.filter(item => item.id !== id);
+    displayCart();
+}
+
+/* SEARCH */
+function searchProduct() {
+    const keyword = document.getElementById("search").value.toLowerCase();
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(product => {
+        const name = product.querySelector("h3").innerText.toLowerCase();
+        product.style.display =
+            name.includes(keyword) ? "block" : "none";
+    });
+}
+
+/* CATEGORY FILTER */
+function filterCategory(category) {
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(product => {
+        if (category === "all") {
+            product.style.display = "block";
+        } else {
+            product.style.display =
+                product.dataset.category === category
+                ? "block"
+                : "none";
+        }
+    });
+}
+
+/* CHECKOUT */
+function goToCheckout() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.location.href = "checkout.html";
+}
+</script>
+
+</body>
+</html>
